@@ -81,14 +81,17 @@ class UserController {
 
     static getById = async (req: Request, res: Response) => {
         const id = parseInt(req.params.id);
-        try {
-            const user = await userRepository.findOne({
-                where: {id, state: true},
-                relations: {rol: true}
-            }); 
-            return user ? res.json({ ok: true, user })
-                : res.json({ ok: false, message: "user not found" })
 
+        
+        
+        try {
+            /*
+            var validEmail =  /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+            const user = new User();
+            
+            var userEmail = user.email;
+            if(userEmail = emai)
+*/
         } catch (error) {
             return res.json({
                 ok: false,
@@ -140,18 +143,22 @@ class UserController {
 
     static deleteUser = async (req: Request, res: Response) => {
         const id = parseInt(req.params.id);
-        const repoUser = AppdataSource.getRepository(User);
+        
         try {
-            const user = await repoUser.findOne({
-                where: { id }
+            const user = await userRepository.findOne({
+                where: { id , state: true}
             });
             console.log(user);
 
             if (!user) {
-                throw new Error("User doesn't exist in the data base");
+                res.json({
+                    ok: "false",
+                    message:"User doesn't exist in the data base"
+                })
             }
+            
             user.state = false;
-            await repoUser.save(user);
+            await userRepository.save(user);
             return res.status(200).json({
                 ok: true,
                 msg: "User was Deleted"
@@ -159,7 +166,7 @@ class UserController {
         } catch (error) {
             return res.json({
                 ok: false,
-                message: "Server Error"
+               msg: `Error: ${error}`
             });
         }
     };

@@ -1,4 +1,9 @@
 "use strict";
+/**
+ * @param bcrypt encipts the user password
+ * @param AppdataSource is an instance of data souce import
+ * @param async codigo asincrono para poder esperar que termine una tarean junto con @param await
+ */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -63,7 +68,6 @@ var User_1 = require("../models/User");
 var data_source_1 = require("../data-source");
 var bcrypt = __importStar(require("bcrypt"));
 var jwt_helper_1 = require("../helper/jwt.helper");
-// add tokens
 var userRepository = data_source_1.AppdataSource.getRepository(User_1.User);
 var userAuthentificator = /** @class */ (function () {
     function userAuthentificator() {

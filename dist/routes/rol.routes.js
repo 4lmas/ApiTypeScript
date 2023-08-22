@@ -9,6 +9,7 @@ var router = (0, express_1.Router)();
 var rol = rol_controller_1.default;
 router.post("/", rol.createRol);
 router.get("/", rol.getRol);
+router.get("/:id", rol.getById);
 router.put("/:id", rol.updateRol);
 router.delete("/:id", rol.deleteRol);
 exports.default = router;

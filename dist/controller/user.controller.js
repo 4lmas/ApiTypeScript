@@ -1,5 +1,9 @@
 "use strict";
-// The imports are here
+/**
+ * @param bcrypt is a encripter passwords
+ * import @module User for the use in this class
+ *
+ */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -71,13 +75,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//import { AppDataSource } from "../data-source";
 var User_1 = require("../models/User");
 var bcrypt = __importStar(require("bcrypt"));
 var data_source_1 = require("../data-source");
-//const { tokenSign } = requiere("../models/generatetoken");
-// declares constant for get data of the mysql
-// create the class
 var userRepository = data_source_1.AppdataSource.getRepository(User_1.User);
 var saltRounds = 10; //this define the number of rounds of encriptacion
 var UserController = /** @class */ (function () {
@@ -103,12 +103,11 @@ var UserController = /** @class */ (function () {
                     user.gender = gender;
                     user.age = age;
                     user.rol = rolId;
-                    //user.password = hashedPassword;
+                    // this await saves the new created user and response with a code status 200 else response with an error
                     return [4 /*yield*/, userRepository.save(user)];
                 case 2:
-                    //user.password = hashedPassword;
-                    _c.sent(); //this name equals to constant name
-                    //this parts generate the future token JWT
+                    // this await saves the new created user and response with a code status 200 else response with an error
+                    _c.sent();
                     return [2 /*return*/, res.status(200).json({
                             ok: true,
                             message: "User was saved"
@@ -141,6 +140,11 @@ var UserController = /** @class */ (function () {
                         var password = user.password, users = __rest(user, ["password"]);
                         return users;
                     });
+                    /**
+                     * in this part i am using the ternary operator, if the number of users is more than zero
+                     * the cosole response with a json status code: 200 and show all users,
+                     * else user less than zero || null responses with a new Error
+                     */
                     return [2 /*return*/, users.length > 0
                             ? res.status(200).json({ ok: true, users: users })
                             : res.json({ ok: false, message: "User not found" })];
@@ -154,35 +158,32 @@ var UserController = /** @class */ (function () {
             }
         });
     }); };
+    // gets the user by id, and i always continue using the ternary operator
     UserController.getById = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, user, error_3;
+        var id;
         return __generator(_a, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    id = parseInt(req.params.id);
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, userRepository.findOne({
-                            where: { id: id, state: true },
-                            relations: { rol: true }
-                        })];
-                case 2:
-                    user = _b.sent();
-                    return [2 /*return*/, user ? res.json({ ok: true, user: user })
-                            : res.json({ ok: false, message: "user not found" })];
-                case 3:
-                    error_3 = _b.sent();
-                    return [2 /*return*/, res.json({
-                            ok: false,
-                            message: "An error has been ocurred: ".concat(error_3)
-                        })];
-                case 4: return [2 /*return*/];
+            id = parseInt(req.params.id);
+            try {
+                /*
+                var validEmail =  /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+                const user = new User();
+                
+                var userEmail = user.email;
+                if(userEmail = emai)
+    */
             }
+            catch (error) {
+                return [2 /*return*/, res.json({
+                        ok: false,
+                        message: "An error has been ocurred: ".concat(error)
+                    })];
+            }
+            return [2 /*return*/];
         });
     }); };
+    // update the exist user
     UserController.updateUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, _b, name, lastName, age, email, gender, repoUser, user, error_4;
+        var id, _b, name, lastName, age, email, gender, repoUser, user, error_3;
         return __generator(_a, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -209,7 +210,7 @@ var UserController = /** @class */ (function () {
                             message: "Data has been saved"
                         })];
                 case 4:
-                    error_4 = _c.sent();
+                    error_3 = _c.sent();
                     return [2 /*return*/, res.json({
                             ok: false,
                             message: "Server error!"
@@ -218,27 +219,30 @@ var UserController = /** @class */ (function () {
             }
         });
     }); };
+    //delete
     UserController.deleteUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, repoUser, user, error_5;
+        var id, user, error_4;
         return __generator(_a, function (_b) {
             switch (_b.label) {
                 case 0:
                     id = parseInt(req.params.id);
-                    repoUser = data_source_1.AppdataSource.getRepository(User_1.User);
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 4, , 5]);
-                    return [4 /*yield*/, repoUser.findOne({
-                            where: { id: id }
+                    return [4 /*yield*/, userRepository.findOne({
+                            where: { id: id, state: true }
                         })];
                 case 2:
                     user = _b.sent();
                     console.log(user);
                     if (!user) {
-                        throw new Error("User doesn't exist in the data base");
+                        res.json({
+                            ok: "false",
+                            message: "User doesn't exist in the data base"
+                        });
                     }
                     user.state = false;
-                    return [4 /*yield*/, repoUser.save(user)];
+                    return [4 /*yield*/, userRepository.save(user)];
                 case 3:
                     _b.sent();
                     return [2 /*return*/, res.status(200).json({
@@ -246,10 +250,10 @@ var UserController = /** @class */ (function () {
                             msg: "User was Deleted"
                         })];
                 case 4:
-                    error_5 = _b.sent();
+                    error_4 = _b.sent();
                     return [2 /*return*/, res.json({
                             ok: false,
-                            message: "Server Error"
+                            msg: "Error: ".concat(error_4)
                         })];
                 case 5: return [2 /*return*/];
             }

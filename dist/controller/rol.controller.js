@@ -1,4 +1,10 @@
 "use strict";
+/**
+ * import @module Rol for the use in this part
+ * import @param Request && @param Response from express
+ * @class <RolController> is used for createRol, getRol, getByIdRol, updateRol && deleteRol
+ * and finally exports the class
+ */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,7 +45,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Rol_1 = require("../models/Rol");
 var data_source_1 = require("../data-source");
 var userRepository = data_source_1.AppdataSource.getRepository(Rol_1.Rol);
-//const saltRounds = 10;
 var RolController = /** @class */ (function () {
     function RolController() {
     }
