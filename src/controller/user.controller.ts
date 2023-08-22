@@ -8,6 +8,7 @@ import { Request, Response } from "express";
 import { User } from "../models/User";
 import * as bcrypt from "bcrypt";
 import { AppdataSource } from "../data-source";
+import cors from 'cors';
 
 const userRepository = AppdataSource.getRepository(User)
 const saltRounds = 10; //this define the number of rounds of encriptacion
