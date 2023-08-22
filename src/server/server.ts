@@ -25,7 +25,7 @@ class Server {
         this.app.use(express.urlencoded({extended:true,limit: '50mb'}))
         this.app.use('/',routes)
         }
-        listen (){
+     listen (){
         this.app.listen((this.port = process.env.PORT || Server.PORT), ()=> {
             console.log(`Server running in ${this.port}`)
         })
