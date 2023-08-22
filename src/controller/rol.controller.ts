@@ -14,12 +14,12 @@ const userRepository = AppdataSource.getRepository(Rol);
 
 class RolController {
     static createRol = async (req: Request, res: Response) => {
-        const { typeRol, description } = req.body;
+        const { rol } = req.body;
 
         try {
-            const rol = new Rol();
-            rol.typeRol = typeRol;
-            rol.description = description;
+            const role = new Rol();
+            role.rol = rol;
+        
 
             await userRepository.save(rol);
 
@@ -70,20 +70,19 @@ class RolController {
 
     static updateRol = async (req: Request, res: Response) => {
         const id = parseInt(req.params.id);
-        const { typeRol, description } = req.body;
+        const { rol } = req.body;
         const repoRol = AppdataSource.getRepository(Rol);
-        let rol: Rol;
+        let role: Rol;
 
         try {
-            rol = await userRepository.findOneOrFail({
+            role = await userRepository.findOneOrFail({
                 where: { id, isActive: true }
             })
 
             if (!rol) {
                 throw new Error("El usuario no existe!")
             }
-            rol.typeRol = typeRol;
-            rol.description = description;
+            role.rol = rol;
             await repoRol.save(rol);
             return res.status(200).json({
                 ok: 200,

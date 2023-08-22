@@ -8,10 +8,7 @@ export class Rol{
     id : number
 
     @Column()
-    typeRol : string
-
-    @Column()
-    description : string
+    rol : string
 
     @Column({default:true})
     isActive : boolean

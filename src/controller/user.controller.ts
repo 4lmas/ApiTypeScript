@@ -54,7 +54,7 @@ class UserController {
                 relations: {
                     rol: true,
                 },
-                where: {state: true}
+                where: {isActive: true}
             })
 
             const users = usersWithPass.map(user => {
@@ -115,7 +115,7 @@ class UserController {
         //else find a One user and update that user
         try {
             user = await repoUser.findOneOrFail({
-                where: { id, state: true }
+                where: { id, isActive: true }
             })
 
             if (!user) {
@@ -147,7 +147,7 @@ class UserController {
         
         try {
             const user = await userRepository.findOne({
-                where: { id , state: true}
+                where: { id , isActive: true}
             });
             console.log(user);
 
@@ -158,7 +158,7 @@ class UserController {
                 })
             }
             
-            user.state = false;
+            user.isActive = false;
             await userRepository.save(user);
             return res.status(200).json({
                 ok: true,

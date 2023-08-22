@@ -26,7 +26,7 @@ export class User{
     password : string
 
     @Column({default: true})
-    state : boolean
+    isActive : boolean
 
     @ManyToOne(()=> Rol, (rol)=> rol.users)
     rol: Rol
