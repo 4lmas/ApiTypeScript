@@ -61,7 +61,7 @@ var RolController = /** @class */ (function () {
                     _b.trys.push([1, 3, , 4]);
                     role = new Rol_1.Rol();
                     role.rol = rol;
-                    return [4 /*yield*/, userRepository.save(rol)];
+                    return [4 /*yield*/, userRepository.save(role)];
                 case 2:
                     _b.sent();
                     return [2 /*return*/, res.status(200).json({
@@ -151,11 +151,11 @@ var RolController = /** @class */ (function () {
                         throw new Error("El usuario no existe!");
                     }
                     role.rol = rol;
-                    return [4 /*yield*/, repoRol.save(rol)];
+                    return [4 /*yield*/, repoRol.save(role)];
                 case 3:
                     _b.sent();
                     return [2 /*return*/, res.status(200).json({
-                            ok: 200,
+                            ok: true,
                             message: "Operation is succesfull"
                         })];
                 case 4:
@@ -202,6 +202,74 @@ var RolController = /** @class */ (function () {
                             message: "Server Error"
                         })];
                 case 5: return [2 /*return*/];
+            }
+        });
+    }); };
+    RolController.paginRol = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var page, take, repoRol, _b, roles, totalItems, totalPages, nextPage, prevPage, e_1;
+        return __generator(_a, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    page = req.query.page || 1;
+                    page = Number(page);
+                    take = req.query.take || 5;
+                    take = Number(take);
+                    _c.label = 1;
+                case 1:
+                    _c.trys.push([1, 3, , 4]);
+                    repoRol = data_source_1.AppdataSource.getRepository(Rol_1.Rol);
+                    return [4 /*yield*/, repoRol.findAndCount({
+                            where: { isActive: true },
+                            skip: (page - 1) * take,
+                            take: take
+                        })];
+                case 2:
+                    _b = _c.sent(), roles = _b[0], totalItems = _b[1];
+                    try {
+                        if (roles.length > 0) {
+                            totalPages = totalItems / take;
+                            if (totalPages % 1 !== 0) {
+                                totalPages = Math.trunc(totalPages) + 1;
+                            }
+                            nextPage = page >= totalPages ? page : page + 1;
+                            prevPage = page <= 1 ? page : page - 1;
+                            return [2 /*return*/, res.json({
+                                    ok: true,
+                                    msg: "Roles encontrados",
+                                    roles: roles,
+                                    totalItems: totalItems,
+                                    totalPages: totalPages,
+                                    currentPage: page,
+                                    nextPage: nextPage,
+                                    prevPage: prevPage,
+                                    empty: true,
+                                    take: take
+                                })];
+                        }
+                        else {
+                            return [2 /*return*/, res.json({
+                                    ok: false,
+                                    message: "No se encontraron roles",
+                                    empty: false
+                                })];
+                        }
+                    }
+                    catch (e) {
+                        return [2 /*return*/, res.json({
+                                ok: false,
+                                error: "Error \n".concat(e),
+                                message: 'Ah ocurrido un error'
+                            })];
+                    }
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_1 = _c.sent();
+                    return [2 /*return*/, res.json({
+                            ok: false,
+                            error: "Error \n".concat(e_1),
+                            message: 'Ah ocurrido un error iesperado'
+                        })];
+                case 4: return [2 /*return*/];
             }
         });
     }); };

@@ -83,9 +83,9 @@ class RolController {
                 throw new Error("El usuario no existe!")
             }
             role.rol = rol;
-            await repoRol.save(rol);
+            await repoRol.save(role);
             return res.status(200).json({
-                ok: 200,
+                ok: true,
                 message: "Operation is succesfull"
             });
         } catch (error) {
@@ -121,6 +121,66 @@ class RolController {
             });
         }
     };
+
+    static paginRol = async (req: Request, res: Response) => {
+        let page = req.query.page || 1;
+        page = Number(page);
+        let take = req.query.take || 5;
+        take = Number(take);
+
+        try {
+            const repoRol = AppdataSource.getRepository(Rol);
+            const [roles, totalItems] = await repoRol.findAndCount({
+                where: { isActive: true },
+                skip: (page -1) * take,
+                take
+            });
+
+            try {
+                if (roles.length > 0){
+                    let totalPages: number = totalItems / take
+
+                    if (totalPages % 1 !== 0){
+                        totalPages = Math.trunc(totalPages) + 1;
+                    }
+
+                    let nextPage: number = page >= totalPages ? page : page + 1;
+                    let prevPage: number = page <= 1 ? page : page -1;
+
+                    return res.json({
+                        ok: true,
+                        msg: "Roles encontrados",
+                        roles,
+                        totalItems,
+                        totalPages,
+                        currentPage: page,
+                        nextPage,
+                        prevPage,
+                        empty: true,
+                        take
+                    });
+                } else {
+                    return res.json({
+                        ok: false,
+                        message: "No se encontraron roles",
+                        empty: false
+                    })
+                }
+            } catch (e) {
+                return res.json({
+                    ok: false,
+                    error: `Error \n${e}`,
+                    message: 'Ah ocurrido un error'
+                })
+            }
+        } catch (e) {
+            return res.json({
+                ok: false,
+                error: `Error \n${e}`,
+                message: 'Ah ocurrido un error iesperado'
+            })
+        }
+    }
 };
 
 export default RolController;

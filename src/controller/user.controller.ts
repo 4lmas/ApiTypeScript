@@ -17,7 +17,6 @@ class UserController {
     static createUser = async (req: Request, res: Response) => {
         const { name, lastName, email, password, age, gender, rolId} = req.body;
         const hashedPassword = bcrypt.hashSync(password, saltRounds);
-
         /* 
         create a new Object user with an instance new User();
         and asign the values in the every case 
@@ -230,8 +229,7 @@ class UserController {
                 msg: 'Ah ocurrido un error inesperado'
             });
         }
-    }
-    
+    }    
 };
 
 export default UserController;

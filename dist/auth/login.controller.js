@@ -69,13 +69,14 @@ var data_source_1 = require("../data-source");
 var bcrypt = __importStar(require("bcrypt"));
 var jwt_helper_1 = require("../helper/jwt.helper");
 var userRepository = data_source_1.AppdataSource.getRepository(User_1.User);
+var token = '';
 var userAuthentificator = /** @class */ (function () {
     function userAuthentificator() {
     }
     var _a;
     _a = userAuthentificator;
     userAuthentificator.loginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _b, email, password, user, token, Error_1;
+        var _b, email, password, user, Error_1;
         return __generator(_a, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -108,6 +109,30 @@ var userAuthentificator = /** @class */ (function () {
                         })];
                 case 7: return [2 /*return*/];
             }
+        });
+    }); };
+    userAuthentificator.logoutUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var takeToken;
+        return __generator(_a, function (_b) {
+            takeToken = token;
+            try {
+                if (takeToken != null || takeToken == ' ') {
+                    return [2 /*return*/, res.status(403).json({
+                            ok: false,
+                            message: "The token isnt exist"
+                        })];
+                }
+                else {
+                    takeToken = null;
+                }
+            }
+            catch (e) {
+                console.error("An error has been ocurred \n".concat(e));
+            }
+            finally {
+                console.error("The isnt not found");
+            }
+            return [2 /*return*/];
         });
     }); };
     return userAuthentificator;
