@@ -21,7 +21,7 @@ class RolController {
             role.rol = rol;
         
 
-            await userRepository.save(rol);
+            await userRepository.save(role);
 
             return res.status(200).json({
                 ok: true,

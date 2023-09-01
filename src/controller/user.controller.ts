@@ -171,6 +171,68 @@ class UserController {
             });
         }
     };
+
+    static paginUser = async(req: Request, res: Response)=>{
+        let page = req.query.page || 1;
+        page = Number(page);
+        let take = req.query.take || 5;
+        take = Number(take);
+
+        try {
+            const repoUser = AppdataSource.getRepository(User);
+            const [users, totalItems] = await repoUser.findAndCount({
+                relations: { rol: true},
+                where: { isActive: true},
+                skip: (page -1) * take,
+                take
+            });
+            try {
+                if (users.length > 0){
+                    let totalPages: number = totalItems / take;
+
+                    if (totalPages % 1 !== 0) {
+                        totalPages = Math.trunc(totalPages) + 1;
+                    }
+
+                    let nextPage: number = page >= totalPages ? page : page + 1;
+                    let prevPage: number = page <= 1 ? page : page -1;
+
+                    return res.json({
+                        ok: true,
+                        msg: "Usuarios encontrados",
+                        users,
+                        totalItems,
+                        totalPages,
+                        currentPage: page,
+                        nextPage,
+                        prevPage,
+                        empty: true,
+                        take
+                    });
+                } else {
+                    return res.json({
+                        msg: "No se encontraron usuarios",
+                        empty: true,
+                        ok: false
+                    });
+                }
+            } catch (e) {
+                return res.json({
+                    ok: false,
+                    error: `Error ${e}`,
+                    mesg: 'Ah ocurrido un error inesperado'
+                });
+            }
+        } catch (e) {
+            return res.json({
+                ok: false,
+                error: `Error ${e}`,
+                msg: 'Ah ocurrido un error inesperado'
+            });
+        }
+    }
+    
 };
 
 export default UserController;
+

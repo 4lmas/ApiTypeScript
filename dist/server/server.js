@@ -6,12 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var morgan_1 = __importDefault(require("morgan"));
 var index_routes_1 = __importDefault(require("../routes/index.routes"));
+var cors_1 = __importDefault(require("cors"));
 var Server = /** @class */ (function () {
     function Server() {
         this.app = (0, express_1.default)();
         this.middlewares();
     }
     Server.prototype.middlewares = function () {
+        this.app.use((0, cors_1.default)({
+            origin: ['http://localhost:5173', 'http://localhost:5174'],
+            Credentials: true
+        }));
         this.app.use((0, morgan_1.default)('dev'));
         this.app.use(express_1.default.json({ limit: '50mb' }));
         this.app.use(express_1.default.urlencoded({ extended: true, limit: '50mb' }));

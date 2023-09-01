@@ -132,7 +132,7 @@ var UserController = /** @class */ (function () {
                             relations: {
                                 rol: true,
                             },
-                            where: { state: true }
+                            where: { isActive: true }
                         })];
                 case 1:
                     usersWithPass = _b.sent();
@@ -194,7 +194,7 @@ var UserController = /** @class */ (function () {
                 case 1:
                     _c.trys.push([1, 4, , 5]);
                     return [4 /*yield*/, repoUser.findOneOrFail({
-                            where: { id: id, state: true }
+                            where: { id: id, isActive: true }
                         })];
                 case 2:
                     user = _c.sent();
@@ -230,7 +230,7 @@ var UserController = /** @class */ (function () {
                 case 1:
                     _b.trys.push([1, 4, , 5]);
                     return [4 /*yield*/, userRepository.findOne({
-                            where: { id: id, state: true }
+                            where: { id: id, isActive: true }
                         })];
                 case 2:
                     user = _b.sent();
@@ -241,7 +241,7 @@ var UserController = /** @class */ (function () {
                             message: "User doesn't exist in the data base"
                         });
                     }
-                    user.state = false;
+                    user.isActive = false;
                     return [4 /*yield*/, userRepository.save(user)];
                 case 3:
                     _b.sent();
@@ -256,6 +256,75 @@ var UserController = /** @class */ (function () {
                             msg: "Error: ".concat(error_4)
                         })];
                 case 5: return [2 /*return*/];
+            }
+        });
+    }); };
+    UserController.paginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var page, take, repoUser, _b, users, totalItems, totalPages, nextPage, prevPage, e_1;
+        return __generator(_a, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    page = req.query.page || 1;
+                    page = Number(page);
+                    take = req.query.take || 5;
+                    take = Number(take);
+                    _c.label = 1;
+                case 1:
+                    _c.trys.push([1, 3, , 4]);
+                    repoUser = data_source_1.AppdataSource.getRepository(User_1.User);
+                    return [4 /*yield*/, repoUser.findAndCount({
+                            relations: { rol: true },
+                            where: { isActive: true },
+                            skip: (page - 1) * take,
+                            take: take
+                        })];
+                case 2:
+                    _b = _c.sent(), users = _b[0], totalItems = _b[1];
+                    try {
+                        if (users.length > 0) {
+                            totalPages = totalItems / take;
+                            if (totalPages % 1 !== 0) {
+                                totalPages = Math.trunc(totalPages) + 1;
+                            }
+                            nextPage = page >= totalPages ? page : page + 1;
+                            prevPage = page <= 1 ? page : page - 1;
+                            return [2 /*return*/, res.json({
+                                    ok: true,
+                                    msg: "Usuarios encontrados",
+                                    users: users,
+                                    totalItems: totalItems,
+                                    totalPages: totalPages,
+                                    currentPage: page,
+                                    nextPage: nextPage,
+                                    prevPage: prevPage,
+                                    empty: true,
+                                    take: take
+                                })];
+                        }
+                        else {
+                            return [2 /*return*/, res.json({
+                                    msg: "No se encontraron usuarios",
+                                    empty: true,
+                                    ok: false
+                                })];
+                        }
+                    }
+                    catch (e) {
+                        return [2 /*return*/, res.json({
+                                ok: false,
+                                error: "Error ".concat(e),
+                                mesg: 'Ah ocurrido un error inesperado'
+                            })];
+                    }
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_1 = _c.sent();
+                    return [2 /*return*/, res.json({
+                            ok: false,
+                            error: "Error ".concat(e_1),
+                            msg: 'Ah ocurrido un error inesperado'
+                        })];
+                case 4: return [2 /*return*/];
             }
         });
     }); };

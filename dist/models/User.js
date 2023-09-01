@@ -46,7 +46,7 @@ var User = exports.User = /** @class */ (function () {
     __decorate([
         (0, typeorm_1.Column)({ default: true }),
         __metadata("design:type", Boolean)
-    ], User.prototype, "state", void 0);
+    ], User.prototype, "isActive", void 0);
     __decorate([
         (0, typeorm_1.ManyToOne)(function () { return Rol_1.Rol; }, function (rol) { return rol.users; }),
         __metadata("design:type", Rol_1.Rol)

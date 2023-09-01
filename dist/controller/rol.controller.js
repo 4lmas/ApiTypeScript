@@ -51,26 +51,25 @@ var RolController = /** @class */ (function () {
     var _a;
     _a = RolController;
     RolController.createRol = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _b, typeRol, description, rol, error_1;
-        return __generator(_a, function (_c) {
-            switch (_c.label) {
+        var rol, role, error_1;
+        return __generator(_a, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    _b = req.body, typeRol = _b.typeRol, description = _b.description;
-                    _c.label = 1;
+                    rol = req.body.rol;
+                    _b.label = 1;
                 case 1:
-                    _c.trys.push([1, 3, , 4]);
-                    rol = new Rol_1.Rol();
-                    rol.typeRol = typeRol;
-                    rol.description = description;
+                    _b.trys.push([1, 3, , 4]);
+                    role = new Rol_1.Rol();
+                    role.rol = rol;
                     return [4 /*yield*/, userRepository.save(rol)];
                 case 2:
-                    _c.sent();
+                    _b.sent();
                     return [2 /*return*/, res.status(200).json({
                             ok: true,
                             message: "The rol has been saved!"
                         })];
                 case 3:
-                    error_1 = _c.sent();
+                    error_1 = _b.sent();
                     return [2 /*return*/, res.json({
                             ok: false,
                             errorMessage: "An error has been ocurred: ".concat(error_1)
@@ -133,35 +132,34 @@ var RolController = /** @class */ (function () {
         });
     }); };
     RolController.updateRol = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, _b, typeRol, description, repoRol, rol, error_4;
-        return __generator(_a, function (_c) {
-            switch (_c.label) {
+        var id, rol, repoRol, role, error_4;
+        return __generator(_a, function (_b) {
+            switch (_b.label) {
                 case 0:
                     id = parseInt(req.params.id);
-                    _b = req.body, typeRol = _b.typeRol, description = _b.description;
+                    rol = req.body.rol;
                     repoRol = data_source_1.AppdataSource.getRepository(Rol_1.Rol);
-                    _c.label = 1;
+                    _b.label = 1;
                 case 1:
-                    _c.trys.push([1, 4, , 5]);
+                    _b.trys.push([1, 4, , 5]);
                     return [4 /*yield*/, userRepository.findOneOrFail({
                             where: { id: id, isActive: true }
                         })];
                 case 2:
-                    rol = _c.sent();
+                    role = _b.sent();
                     if (!rol) {
                         throw new Error("El usuario no existe!");
                     }
-                    rol.typeRol = typeRol;
-                    rol.description = description;
+                    role.rol = rol;
                     return [4 /*yield*/, repoRol.save(rol)];
                 case 3:
-                    _c.sent();
+                    _b.sent();
                     return [2 /*return*/, res.status(200).json({
                             ok: 200,
                             message: "Operation is succesfull"
                         })];
                 case 4:
-                    error_4 = _c.sent();
+                    error_4 = _b.sent();
                     return [2 /*return*/, res.json({
                             ok: false,
                             errorMessage: "server error"

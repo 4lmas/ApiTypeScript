@@ -22,11 +22,7 @@ var Rol = exports.Rol = /** @class */ (function () {
     __decorate([
         (0, typeorm_1.Column)(),
         __metadata("design:type", String)
-    ], Rol.prototype, "typeRol", void 0);
-    __decorate([
-        (0, typeorm_1.Column)(),
-        __metadata("design:type", String)
-    ], Rol.prototype, "description", void 0);
+    ], Rol.prototype, "rol", void 0);
     __decorate([
         (0, typeorm_1.Column)({ default: true }),
         __metadata("design:type", Boolean)
