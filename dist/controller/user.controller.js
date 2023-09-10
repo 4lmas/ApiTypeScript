@@ -92,6 +92,7 @@ var UserController = /** @class */ (function () {
                 case 0:
                     _b = req.body, name = _b.name, lastName = _b.lastName, email = _b.email, password = _b.password, age = _b.age, gender = _b.gender, rolId = _b.rolId;
                     hashedPassword = bcrypt.hashSync(password, saltRounds);
+                    console.log(hashedPassword);
                     _c.label = 1;
                 case 1:
                     _c.trys.push([1, 3, , 4]);
@@ -164,13 +165,6 @@ var UserController = /** @class */ (function () {
         return __generator(_a, function (_b) {
             id = parseInt(req.params.id);
             try {
-                /*
-                var validEmail =  /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
-                const user = new User();
-                
-                var userEmail = user.email;
-                if(userEmail = emai)
-    */
             }
             catch (error) {
                 return [2 /*return*/, res.json({
@@ -183,12 +177,12 @@ var UserController = /** @class */ (function () {
     }); };
     // update the exist user
     UserController.updateUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, _b, name, lastName, age, email, gender, repoUser, user, error_3;
+        var id, _b, name, lastName, age, email, gender, rolId, repoUser, user, rol, error_3;
         return __generator(_a, function (_c) {
             switch (_c.label) {
                 case 0:
                     id = parseInt(req.params.id);
-                    _b = req.body, name = _b.name, lastName = _b.lastName, age = _b.age, email = _b.email, gender = _b.gender;
+                    _b = req.body, name = _b.name, lastName = _b.lastName, age = _b.age, email = _b.email, gender = _b.gender, rolId = _b.rolId;
                     repoUser = data_source_1.AppdataSource.getRepository(User_1.User);
                     _c.label = 1;
                 case 1:
@@ -201,7 +195,13 @@ var UserController = /** @class */ (function () {
                     if (!user) {
                         throw new Error("User dont exist in the data base");
                     }
-                    user.name = name, user.lastName = lastName, user.email = email, user.gender = gender, user.age = age, user.password;
+                    user.name = name,
+                        user.lastName = lastName,
+                        user.email = email,
+                        user.gender = gender,
+                        user.age = age,
+                        user.password,
+                        user.rol = rolId;
                     return [4 /*yield*/, repoUser.save(user)];
                 case 3:
                     _c.sent();
@@ -260,7 +260,7 @@ var UserController = /** @class */ (function () {
         });
     }); };
     UserController.paginUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var page, take, repoUser, _b, users, totalItems, totalPages, nextPage, prevPage, e_1;
+        var page, take, repoUser, _b, users, totalItems, totalPages, nextPage, prevPage, userWithoutPass, e_1;
         return __generator(_a, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -288,10 +288,14 @@ var UserController = /** @class */ (function () {
                             }
                             nextPage = page >= totalPages ? page : page + 1;
                             prevPage = page <= 1 ? page : page - 1;
+                            userWithoutPass = users.map(function (user) {
+                                var password = user.password, userWithoutPass = __rest(user, ["password"]);
+                                return userWithoutPass;
+                            });
                             return [2 /*return*/, res.json({
                                     ok: true,
                                     msg: "Usuarios encontrados",
-                                    users: users,
+                                    users: userWithoutPass,
                                     totalItems: totalItems,
                                     totalPages: totalPages,
                                     currentPage: page,

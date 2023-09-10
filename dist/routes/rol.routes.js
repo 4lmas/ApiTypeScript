@@ -8,6 +8,7 @@ var rol_controller_1 = __importDefault(require("../controller/rol.controller"));
 var router = (0, express_1.Router)();
 var rol = rol_controller_1.default;
 router.post("/", rol.createRol);
+router.get("/pagination", rol.paginRol);
 router.get("/", rol.getRol);
 router.get("/:id", rol.getById);
 router.put("/:id", rol.updateRol);

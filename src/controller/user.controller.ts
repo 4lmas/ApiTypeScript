@@ -8,7 +8,7 @@ import { Request, Response } from "express";
 import { User } from "../models/User";
 import * as bcrypt from "bcrypt";
 import { AppdataSource } from "../data-source";
-import cors from 'cors';
+import { Rol } from "../models/Rol";
 
 const userRepository = AppdataSource.getRepository(User)
 const saltRounds = 10; //this define the number of rounds of encriptacion
@@ -17,6 +17,7 @@ class UserController {
     static createUser = async (req: Request, res: Response) => {
         const { name, lastName, email, password, age, gender, rolId} = req.body;
         const hashedPassword = bcrypt.hashSync(password, saltRounds);
+        console.log(hashedPassword);
         /* 
         create a new Object user with an instance new User();
         and asign the values in the every case 
@@ -81,17 +82,7 @@ class UserController {
 
     static getById = async (req: Request, res: Response) => {
         const id = parseInt(req.params.id);
-
-        
-        
         try {
-            /*
-            var validEmail =  /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
-            const user = new User();
-            
-            var userEmail = user.email;
-            if(userEmail = emai)
-*/
         } catch (error) {
             return res.json({
                 ok: false,
@@ -106,12 +97,10 @@ class UserController {
         const id = parseInt(req.params.id);
 
         //this array gets the data of the models
-        const { name, lastName, age, email, gender } = req.body;
+        const { name, lastName, age, email, gender, rolId } = req.body;
         const repoUser = AppdataSource.getRepository(User);
         let user: User;
-
-        // in this case find a one user, if the user is doesnt exist the update  will not run,
-        //else find a One user and update that user
+        let rol: Rol;
         try {
             user = await repoUser.findOneOrFail({
                 where: { id, isActive: true }
@@ -126,6 +115,8 @@ class UserController {
                 user.gender = gender,
                 user.age = age,
                 user.password,
+                user.rol = rolId;
+                
                 await repoUser.save(user);
             return res.status(200).json({
                 ok: true,
@@ -143,6 +134,7 @@ class UserController {
 
     static deleteUser = async (req: Request, res: Response) => {
         const id = parseInt(req.params.id);
+        
         
         try {
             const user = await userRepository.findOne({
@@ -169,7 +161,8 @@ class UserController {
                msg: `Error: ${error}`
             });
         }
-    };
+    }; 
+
 
     static paginUser = async(req: Request, res: Response)=>{
         let page = req.query.page || 1;
@@ -178,6 +171,8 @@ class UserController {
         take = Number(take);
 
         try {
+            
+
             const repoUser = AppdataSource.getRepository(User);
             const [users, totalItems] = await repoUser.findAndCount({
                 relations: { rol: true},
@@ -196,10 +191,15 @@ class UserController {
                     let nextPage: number = page >= totalPages ? page : page + 1;
                     let prevPage: number = page <= 1 ? page : page -1;
 
+                    const userWithoutPass = users.map(user => {
+                        const { password, ...userWithoutPass } = user
+                        return userWithoutPass
+                    })
+
                     return res.json({
                         ok: true,
                         msg: "Usuarios encontrados",
-                        users,
+                        users: userWithoutPass,
                         totalItems,
                         totalPages,
                         currentPage: page,

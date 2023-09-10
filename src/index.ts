@@ -2,6 +2,7 @@ import "reflect-metadata";
 import dotenv from "dotenv";
 import Server from "./server/server";
 import { AppdataSource } from "./data-source";
+
 dotenv.config();
 
 const server = new Server();
